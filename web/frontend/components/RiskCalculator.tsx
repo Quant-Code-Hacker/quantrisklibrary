@@ -95,8 +95,27 @@ export default function RiskCalculator() {
               onChange={(e) => setMetric(e.target.value)}
               className="w-full bg-gray-700 border border-gray-600 rounded-lg p-2"
             >
-              <option value="var">VaR</option>
-              <option value="cvar">CVaR</option>
+              <optgroup label="Market Risk">
+                <option value="var">VaR</option>
+                <option value="cvar">CVaR</option>
+                <option value="volatility">Volatility</option>
+                <option value="downsidedeviation">Downside Deviation</option>
+                <option value="semideviation">Semi-Deviation</option>
+                <option value="skewness">Skewness</option>
+                <option value="kurtosis">Kurtosis</option>
+              </optgroup>
+              <optgroup label="Drawdown Metrics">
+                <option value="maxdrawdown">Max Drawdown</option>
+                <option value="averagedrawdown">Average Drawdown</option>
+                <option value="ulcerindex">Ulcer Index</option>
+              </optgroup>
+              <optgroup label="Risk-Adjusted Ratios">
+                <option value="sharperatio">Sharpe Ratio</option>
+                <option value="sortinoratio">Sortino Ratio</option>
+                <option value="calmarratio">Calmar Ratio</option>
+                <option value="informationratio">Information Ratio</option>
+                <option value="omegaratio">Omega Ratio</option>
+              </optgroup>
             </select>
           </div>
 

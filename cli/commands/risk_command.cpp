@@ -19,7 +19,12 @@ Backend parse_backend(const std::string& s) {
 int run_risk_command(const std::vector<std::string>& args) {
     if (args.empty()) {
         std::cerr << "Usage: quantforge risk <portfolio.csv> "
-                     "[--metric var|cvar] [--confidence 0.99] "
+                     "[--metric var|cvar|volatility|downsidedeviation|semideviation|"
+                     "skewness|kurtosis|maxdrawdown|averagedrawdown|ulcerindex|"
+                     "sharperatio|sortinoratio|calmarratio|informationratio|omegaratio|"
+                     "marginalvar|componentvar|incrementalvar|beta|trackingerror|"
+                     "sterlingratio|burkeratio|diversificationratio|hhi] "
+                     "[--confidence 0.99] "
                      "[--simulations 1000000] [--backend auto|cpu|openmp|cuda] "
                      "[--seed 42] [--adaptive] [--verify]\n";
         return 1;
@@ -51,10 +56,61 @@ int run_risk_command(const std::vector<std::string>& args) {
     try {
         Portfolio portfolio = Portfolio::from_csv(portfolio_path);
         RiskEngine engine;
+        RiskReport report;
 
-        RiskReport report = (metric == "cvar")
-            ? engine.calculate<CVaR>(portfolio, config)
-            : engine.calculate<VaR>(portfolio, config);
+        // Dispatch based on metric name
+        if (metric == "var" || metric == "VaR") {
+            report = engine.calculate<VaR>(portfolio, config);
+        } else if (metric == "cvar" || metric == "CVaR") {
+            report = engine.calculate<CVaR>(portfolio, config);
+        } else if (metric == "volatility" || metric == "Volatility") {
+            report = engine.calculate<Volatility>(portfolio, config);
+        } else if (metric == "downsidedeviation" || metric == "DownsideDeviation") {
+            report = engine.calculate<DownsideDeviation>(portfolio, config);
+        } else if (metric == "semideviation" || metric == "SemiDeviation") {
+            report = engine.calculate<SemiDeviation>(portfolio, config);
+        } else if (metric == "skewness" || metric == "Skewness") {
+            report = engine.calculate<Skewness>(portfolio, config);
+        } else if (metric == "kurtosis" || metric == "Kurtosis") {
+            report = engine.calculate<Kurtosis>(portfolio, config);
+        } else if (metric == "maxdrawdown" || metric == "MaxDrawdown") {
+            report = engine.calculate<MaxDrawdown>(portfolio, config);
+        } else if (metric == "averagedrawdown" || metric == "AverageDrawdown") {
+            report = engine.calculate<AverageDrawdown>(portfolio, config);
+        } else if (metric == "ulcerindex" || metric == "UlcerIndex") {
+            report = engine.calculate<UlcerIndex>(portfolio, config);
+        } else if (metric == "sharperatio" || metric == "SharpeRatio") {
+            report = engine.calculate<SharpeRatio>(portfolio, config);
+        } else if (metric == "sortinoratio" || metric == "SortinoRatio") {
+            report = engine.calculate<SortinoRatio>(portfolio, config);
+        } else if (metric == "calmarratio" || metric == "CalmarRatio") {
+            report = engine.calculate<CalmarRatio>(portfolio, config);
+        } else if (metric == "informationratio" || metric == "InformationRatio") {
+            report = engine.calculate<InformationRatio>(portfolio, config);
+        } else if (metric == "omegaratio" || metric == "OmegaRatio") {
+            report = engine.calculate<OmegaRatio>(portfolio, config);
+        } else if (metric == "marginalvar" || metric == "MarginalVaR") {
+            report = engine.calculate<MarginalVaR>(portfolio, config);
+        } else if (metric == "componentvar" || metric == "ComponentVaR") {
+            report = engine.calculate<ComponentVaR>(portfolio, config);
+        } else if (metric == "incrementalvar" || metric == "IncrementalVaR") {
+            report = engine.calculate<IncrementalVaR>(portfolio, config);
+        } else if (metric == "beta" || metric == "Beta") {
+            report = engine.calculate<Beta>(portfolio, config);
+        } else if (metric == "trackingerror" || metric == "TrackingError") {
+            report = engine.calculate<TrackingError>(portfolio, config);
+        } else if (metric == "sterlingratio" || metric == "SterlingRatio") {
+            report = engine.calculate<SterlingRatio>(portfolio, config);
+        } else if (metric == "burkeratio" || metric == "BurkeRatio") {
+            report = engine.calculate<BurkeRatio>(portfolio, config);
+        } else if (metric == "diversificationratio" || metric == "DiversificationRatio") {
+            report = engine.calculate<DiversificationRatio>(portfolio, config);
+        } else if (metric == "hhi" || metric == "HHI") {
+            report = engine.calculate<HHI>(portfolio, config);
+        } else {
+            std::cerr << "Unknown metric: " << metric << "\n";
+            return 1;
+        }
 
         std::cout << report.to_json() << "\n";
         return 0;

@@ -60,6 +60,10 @@ add_library(quantforge_core
     src/risk/risk_report.cpp
     src/risk/metrics/var.cpp
     src/risk/metrics/cvar.cpp
+    src/risk/metrics/distribution_metrics.cpp
+    src/risk/metrics/drawdown_metrics.cpp
+    src/risk/metrics/ratio_metrics.cpp
+    src/risk/metrics/advanced_risk_metrics.cpp
     src/risk/convergence.cpp
     src/execution/orchestrator.cpp
     src/execution/workload_estimator.cpp

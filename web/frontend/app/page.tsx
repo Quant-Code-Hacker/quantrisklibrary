@@ -1,69 +1,142 @@
 "use client";
 
-import { useState } from "react";
-import { Calculator, BarChart3, AlertTriangle, Activity } from "lucide-react";
-import RiskCalculator from "@/components/RiskCalculator";
-import Benchmark from "@/components/Benchmark";
-import StressTest from "@/components/StressTest";
+import MetricCard from '@/components/dashboard/MetricCard';
 
-type Tab = "risk" | "benchmark" | "stress";
-
-export default function Home() {
-  const [activeTab, setActiveTab] = useState<Tab>("risk");
-
+export default function CommandCenter() {
   return (
-    <main className="min-h-screen bg-gradient-to-br from-gray-900 to-gray-800 text-white">
-      <div className="container mx-auto px-4 py-8">
-        <header className="mb-8">
-          <h1 className="text-4xl font-bold mb-2 flex items-center gap-3">
-            <Activity className="w-10 h-10 text-blue-400" />
-            QuantForge
-          </h1>
-          <p className="text-gray-400">Financial Risk Computing Engine</p>
-        </header>
+    <div className="p-6 space-y-6">
+      {/* Header */}
+      <div className="mb-6">
+        <h1 className="text-2xl font-bold tracking-tight">Command Center</h1>
+        <p className="text-sm text-foreground-muted mt-1">Real-time portfolio and risk overview</p>
+      </div>
 
-        <div className="flex gap-2 mb-6">
-          <button
-            onClick={() => setActiveTab("risk")}
-            className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-colors ${
-              activeTab === "risk"
-                ? "bg-blue-600 text-white"
-                : "bg-gray-700 text-gray-300 hover:bg-gray-600"
-            }`}
-          >
-            <Calculator className="w-5 h-5" />
-            Risk Calculator
+      {/* KPI Grid */}
+      <div className="grid grid-cols-4 gap-4">
+        <MetricCard
+          label="Portfolio Value"
+          value={1247500}
+          format="currency"
+          change={0.0234}
+          trend="up"
+          clickable
+          accent="primary"
+        />
+        <MetricCard
+          label="Daily P&L"
+          value={28500}
+          format="currency"
+          change={0.0234}
+          trend="up"
+          accent="success"
+        />
+        <MetricCard
+          label="Return"
+          value={0.1523}
+          format="percent"
+          change={0.0045}
+          trend="up"
+          accent="success"
+        />
+        <MetricCard
+          label="Volatility"
+          value={0.142}
+          format="percent"
+          change={-0.0023}
+          trend="down"
+          accent="warning"
+        />
+        <MetricCard
+          label="VaR 99%"
+          value={184083}
+          format="currency"
+          clickable
+          accent="danger"
+        />
+        <MetricCard
+          label="CVaR 99%"
+          value={221500}
+          format="currency"
+          clickable
+          accent="danger"
+        />
+        <MetricCard
+          label="Max Drawdown"
+          value={-0.0842}
+          format="percent"
+          trend="down"
+          accent="warning"
+        />
+        <MetricCard
+          label="Sharpe Ratio"
+          value={1.42}
+          format="number"
+          change={0.05}
+          trend="up"
+          accent="success"
+        />
+      </div>
+
+      {/* Secondary Metrics */}
+      <div className="grid grid-cols-6 gap-4">
+        <MetricCard
+          label="Beta"
+          value={1.15}
+          format="number"
+          accent="primary"
+        />
+        <MetricCard
+          label="Tracking Error"
+          value={0.032}
+          format="percent"
+          accent="primary"
+        />
+        <MetricCard
+          label="Skewness"
+          value={-0.42}
+          format="number"
+          accent="primary"
+        />
+        <MetricCard
+          label="Kurtosis"
+          value={3.85}
+          format="number"
+          accent="primary"
+        />
+        <MetricCard
+          label="Sortino Ratio"
+          value={1.89}
+          format="number"
+          accent="success"
+        />
+        <MetricCard
+          label="Calmar Ratio"
+          value={1.81}
+          format="number"
+          accent="success"
+        />
+      </div>
+
+      {/* Quick Actions */}
+      <div className="bg-surface border border-border rounded-lg p-4">
+        <h2 className="text-sm font-medium text-foreground-muted uppercase tracking-wider mb-3">
+          Quick Actions
+        </h2>
+        <div className="grid grid-cols-4 gap-3">
+          <button className="px-4 py-2 bg-surface-elevated hover:bg-surface-hover border border-border rounded-lg text-sm transition-colors">
+            Run VaR Calculation
           </button>
-          <button
-            onClick={() => setActiveTab("benchmark")}
-            className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-colors ${
-              activeTab === "benchmark"
-                ? "bg-blue-600 text-white"
-                : "bg-gray-700 text-gray-300 hover:bg-gray-600"
-            }`}
-          >
-            <BarChart3 className="w-5 h-5" />
-            Benchmark
+          <button className="px-4 py-2 bg-surface-elevated hover:bg-surface-hover border border-border rounded-lg text-sm transition-colors">
+            Run Benchmark
           </button>
-          <button
-            onClick={() => setActiveTab("stress")}
-            className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-colors ${
-              activeTab === "stress"
-                ? "bg-blue-600 text-white"
-                : "bg-gray-700 text-gray-300 hover:bg-gray-600"
-            }`}
-          >
-            <AlertTriangle className="w-5 h-5" />
+          <button className="px-4 py-2 bg-surface-elevated hover:bg-surface-hover border border-border rounded-lg text-sm transition-colors">
             Stress Test
           </button>
-        </div>
-
-        <div className="bg-gray-800 rounded-xl p-6 shadow-xl">
-          {activeTab === "risk" && <RiskCalculator />}
-          {activeTab === "benchmark" && <Benchmark />}
-          {activeTab === "stress" && <StressTest />}
+          <button className="px-4 py-2 bg-surface-elevated hover:bg-surface-hover border border-border rounded-lg text-sm transition-colors">
+            Monte Carlo Sim
+          </button>
         </div>
       </div>
-    </main>
+    </div>
   );
 }

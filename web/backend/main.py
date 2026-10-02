@@ -98,7 +98,7 @@ async def calculate_risk(request: dict):
 
 
 @app.post("/api/benchmark")
-async def benchmark(request: BenchmarkRequest):
+async def benchmark(request: dict):
     """Benchmark different backends (CPU, OpenMP, CUDA)."""
     temp_file = Path(__file__).parent / "temp_portfolio.csv"
     temp_file.write_text(request.portfolio_csv)
